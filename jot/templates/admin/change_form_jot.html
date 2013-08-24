@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_static admin_modify admin_urls %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript">
+window.__jot_ajax_error_msg__ = "{{ jot_ajax_error_msg }}";
+window.__jot_get_objects_url__ = '{% url 'jot_get_objects' %}';
+window.__jot_child_object_id__ = {{ original.object_id|default:"undefined" }};
+</script>
+{% endblock %}
