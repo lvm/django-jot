@@ -8,11 +8,31 @@ from django.conf import settings
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 JOT_MESSAGE_LEVEL = 23
 
+
+def limit_contenttype_relations():
+    try:
+        relations = settings.JOT_RELATIONSHIPS
+    except:
+        relations = []
+
+    query = None
+    for rel in relations:
+        _app, _model = rel.split('.')
+        qq = models.Q(app_label=_app, model=_model.lower())
+        if not query:
+            query = qq
+        else:
+            query = query | qq
+
+    return query
+
+
 class JotGenericRelationModel(models.Model):
     date = models.DateTimeField(auto_now_add=True, editable=False)
     updated = models.DateTimeField(auto_now_add=True, editable=False)
     created_by = models.ForeignKey(AUTH_USER_MODEL)
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType,
+                                     limit_choices_to=limit_contenttype_relations())
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey("content_type", "object_id")
     personal = models.BooleanField(_('Is Personal?'), default=False)
