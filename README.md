@@ -28,9 +28,18 @@ For example:
     
     class SomethingAdmin(JotNotifications, admin.ModelAdmin):
       pass
-    
 
-And the result would be (yay, screenshots!):  
+Also, you can use the setting `JOT_RELATIONSHIPS` (which can be a `tuple` or a `list`) contanining the `app.model`s you want to work with.  
+For Example
+
+    JOT_RELATIONSHIPS = ('something.Bla',
+                         'something.Ble',
+                         'something.Bli',
+                        )
+
+#### yay, screenshots!
+
+If you ever used the Django admin, probably you already know how a `message` looks like, but just for the kicks:
 
 Django Admin:  
 
