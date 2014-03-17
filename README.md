@@ -52,7 +52,3 @@ Django Admin with [django-suit](http://djangosuit.com/):
 Django Admin with Bootstrap:
 
 ![Django Admin with Bootstrap](preview-django-w-bootstrap.png)
-
-## Notes
-
-Until Django releases the version 1.6 as the stable, this project requires that you have jQuery in your static files, such as [django-jquery](https://pypi.python.org/pypi/django-jquery/1.9.1), simply because the jQuery version shipped with <=1.5.2 is way outdated (1.4.2). 
