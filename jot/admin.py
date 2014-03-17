@@ -21,8 +21,8 @@ from forms import (
 )
 
 def notify_if_not_duplicate(request, item):
-    the_message_content = mark_safe("""<strong><a title='{dismiss_title}' 
-                                href='{dismiss_url}'>&times;</a></strong>
+    the_message_content = mark_safe("""<strong><a title='{dismiss_title}'
+                                 href='{dismiss_url}'>&times;</a></strong>
                                 <small><em>{date}</em></small>,
                                 <strong>{created_by}</strong>:
                                 {message}""".format(
@@ -49,7 +49,7 @@ def jot_notifications(request, ModelContentType, obj_id):
 
     oneliners = OneLiner.objects.filter(**filter_by)
     notes = Note.objects.filter(**filter_by)
-    items = sorted(chain(oneliners, notes), 
+    items = sorted(chain(oneliners, notes),
                    key=attrgetter('date'))
 
     for item in items:
@@ -58,7 +58,6 @@ def jot_notifications(request, ModelContentType, obj_id):
                 notify_if_not_duplicate(request, item)
         else:
             notify_if_not_duplicate(request, item)
-            
 
     return {'jot_notifications': "{n} items".format(n=len(items))}
 
@@ -67,7 +66,7 @@ class JotNotifications(admin.options.BaseModelAdmin):
         ct = ContentType.objects.get_for_model(self.model)
         jot_notifications(request, ct, object_id)
         return super(JotNotifications, self).change_view(request, object_id,
-                                                   form_url, 
+                                                   form_url,
                                                    extra_context)
 
 class NoteAdmin(JotNotifications, admin.ModelAdmin):
@@ -89,14 +88,7 @@ class NoteAdmin(JotNotifications, admin.ModelAdmin):
                                                                 request, **kwargs)
 
     class Media:
-        # FIXME:TODO:TOREVIEW
-        # crappy version comparison
-        if django_version <= (1,6):
-            js = ('{static}/js/jquery.js'.format(static=settings.STATIC_URL),
-                  '{static}/js/jot.forms.js'.format(static=settings.STATIC_URL),
-                  )
-        else:
-            js = ('{static}/js/jot.forms.js'.format(static=settings.STATIC_URL))
+        js = ('{static}/js/jot.forms.js'.format(static=settings.STATIC_URL),)
 
 class OneLinerAdmin(JotNotifications, admin.ModelAdmin):
     form = OneLinerForm
@@ -111,14 +103,7 @@ class OneLinerAdmin(JotNotifications, admin.ModelAdmin):
                                                                 request, **kwargs)
 
     class Media:
-        # FIXME:TODO:TOREVIEW
-        # crappy version comparison
-        if django_version <= (1,6):
-            js = ('{static}/js/jquery.js'.format(static=settings.STATIC_URL),
-                  '{static}/js/jot.forms.js'.format(static=settings.STATIC_URL),
-                  )
-        else:
-            js = ('{static}/js/jot.forms.js'.format(static=settings.STATIC_URL))
+        js = ('{static}/js/jot.forms.js'.format(static=settings.STATIC_URL),)
 
 admin.site.register(OneLiner, OneLinerAdmin)
 admin.site.register(Note, NoteAdmin)
